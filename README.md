@@ -6,4 +6,8 @@ i know what im doing
 
 probs done in 15mins
 
-go take idgaf
+go take idgaf, in fact i give it to u
+
+gods plaaaan gods plaaaan
+
+now added splitwise func, im too cool
