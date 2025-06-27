@@ -76,6 +76,7 @@
                 expenses = expenses.filter(exp => exp.id !== id);
                 saveToStorage();
                 renderExpenses();
+                renderBalances();
                 showNotification('🗑️ Gasto eliminado');
             }
         }
