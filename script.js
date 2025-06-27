@@ -5,10 +5,8 @@
 
         let expenses = [];
 
-        const EXPENSES_JSONBIN_URL = 'https://api.jsonbin.io/v3/b/685e7db38a456b7966b692ad'; // <-- reemplaza por tu URL de JSONBin para gastos
 
-
-        const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/685e51158a456b7966b68057';
+        const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/685e820b8960c979a5b255be';
         const JSONBIN_KEY = '$2a$10$cqoemLVjqR12TfWv5mf3TufozK/iTAtZw3O5b1j1GD2BvJpLrq9fG';
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -21,7 +19,6 @@
         // Initialize app
         async function init() {
             await loadFromStorage();
-            await loadExpenses();
             renderAll();
             createParticles();
             
@@ -32,23 +29,29 @@
         // Storage functions
         async function loadFromStorage() {
             try {
-                const res = await fetch(`${JSONBIN_URL}/latest`); // 👈 sin headers
+                const res = await fetch(`${JSONBIN_URL}/latest`, {
+                    headers: { 'X-Master-Key': JSONBIN_KEY }
+                });
                 const data = (await res.json()).record;
                 items = data.items || [];
                 plans = data.plans || [];
                 whatsappMessages = data.whatsappMessages || [];
+                expenses = data.expenses || [];
                 showNotification('✅ Datos cargados desde JSONBin');
+                renderAll(); // importante para renderizar gastos también
             } catch (err) {
-                console.error('Error cargando desde JSONBin:', err);
-                showNotification('❌ Error al cargar desde JSONBin');
+                console.error('Error cargando datos:', err);
+                showNotification('❌ Error al cargar datos');
             }
         }
+
 
         async function saveToStorage() {
             const data = {
                 items,
                 plans,
                 whatsappMessages,
+                expenses,
                 lastUpdated: new Date().toISOString()
             };
             try {
@@ -62,43 +65,16 @@
                 });
                 showNotification('💾 Datos guardados en JSONBin');
             } catch (err) {
-                console.error('Error guardando en JSONBin:', err);
-                showNotification('❌ Error al guardar en JSONBin');
+                console.error('Error guardando datos:', err);
+                showNotification('❌ Error al guardar datos');
             }
         }
 
-        async function loadExpenses() {
-            try {
-                const res = await fetch(`${EXPENSES_JSONBIN_URL}/latest`);
-                const data = (await res.json()).record;
-                expenses = data.expenses || [];
-                renderExpenses();
-            } catch (err) {
-                console.error('Error cargando gastos:', err);
-            }
-        }
-
-        async function saveExpenses() {
-            try {
-                await fetch(EXPENSES_JSONBIN_URL, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': JSONBIN_KEY
-                    },
-                    body: JSON.stringify({ expenses, lastUpdated: new Date().toISOString() })
-                });
-                showNotification('💰 Gastos guardados');
-            } catch (err) {
-                console.error('Error guardando gastos:', err);
-                showNotification('❌ Error al guardar gastos');
-            }
-        }
 
         function deleteExpense(id) {
             if (confirm('¿Seguro que quieres eliminar este gasto?')) {
                 expenses = expenses.filter(exp => exp.id !== id);
-                saveExpenses();
+                saveToStorage();
                 renderExpenses();
                 showNotification('🗑️ Gasto eliminado');
             }
@@ -504,7 +480,7 @@
             };
 
             expenses.push(newExpense);
-            await saveExpenses();
+            await saveToStorage();
             renderExpenses();
             e.target.reset();
             populateExpenseForm();
@@ -547,6 +523,7 @@
         function renderAll() {
             renderItems();
             renderPlans();
+            renderExpenses();
             renderWhatsAppMessages();
         }
 
