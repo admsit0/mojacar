@@ -614,14 +614,6 @@
     <div class="container">
         <div class="header">
             <h1>🏖️ Mojácar 2025 🏖️</h1>
-            <p>¡El viaje más épico del año!</p>
-            <div class="profile-badges">
-                <span class="profile-badge profile-ana">Ana</span>
-                <span class="profile-badge profile-adam">Adam</span>
-                <span class="profile-badge profile-alberto">Alberto</span>
-                <span class="profile-badge profile-arancha">Arancha</span>
-                <span class="profile-badge profile-jorge">Jorge</span>
-            </div>
         </div>
 
         <div class="nav-tabs">
@@ -758,8 +750,8 @@
         let plans = [];
         let whatsappMessages = [];
 
-        const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/685e465b8960c979a5b23d20';
-        const JSONBIN_KEY = '$2a$10$BazL/iO8MMYiR9yWLxEZPuWv//VqG9zFgwoyfml950ApT9ltsnEU6';
+        const JSONBIN_URL = 'https://api.jsonbin.io/v3/b/685e51158a456b7966b68057';
+        const JSONBIN_KEY = '$2a$10$cqoemLVjqR12TfWv5mf3TufozK/iTAtZw3O5b1j1GD2BvJpLrq9fG';
 
         document.addEventListener('DOMContentLoaded', () => {
             init();
@@ -772,8 +764,8 @@
             renderAll();
             createParticles();
             
-            // Auto-save every 30 seconds
-            setInterval(saveToStorage, 30000);
+            // // Auto-save every 30 seconds
+            // setInterval(saveToStorage, 30000);
         }
 
         // Storage functions
